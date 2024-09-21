@@ -23,7 +23,7 @@ const TasksPage = () => {
   const [newTask, setNewTask] = useState<any>({
     title: "",
     description: "",
-    status: "ToDo",
+    status: "To-Do",
     priority: "Low",
     dueDate: "",
   });
@@ -137,8 +137,8 @@ const TasksPage = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="To Do">To Do</SelectItem>
-              <SelectItem value="In Progress">In Progress</SelectItem>
+              <SelectItem value="To-Do">To Do</SelectItem>
+              <SelectItem value="In-Progress">In Progress</SelectItem>
               <SelectItem value="Completed">Completed</SelectItem>
             </SelectGroup>
           </SelectContent>
@@ -248,8 +248,8 @@ const TasksPage = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="To Do">To Do</SelectItem>
-                    <SelectItem value="In Progress">In Progress</SelectItem>
+                    <SelectItem value="To-Do">To Do</SelectItem>
+                    <SelectItem value="In-Progress">In Progress</SelectItem>
                     <SelectItem value="Completed">Completed</SelectItem>
                   </SelectGroup>
                 </SelectContent>
