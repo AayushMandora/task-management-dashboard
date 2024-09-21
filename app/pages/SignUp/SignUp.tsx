@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+
 const signUpSchema = z.object({
   email: z
     .string()
@@ -30,6 +31,7 @@ const signUpSchema = z.object({
 });
 
 export default function SignUP() {
+
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
