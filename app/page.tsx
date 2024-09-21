@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 const loginSchema = z.object({
   email: z
@@ -31,6 +32,13 @@ const loginSchema = z.object({
 export default function Home() {
   const route = useRouter();
   const { toast } = useToast();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      route.push("/dashboard/tasks");
+    }
+  });
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
