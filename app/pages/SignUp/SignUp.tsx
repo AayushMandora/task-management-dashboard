@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-const loginSchema = z.object({
+const signUpSchema = z.object({
   email: z
     .string()
     .min(1, { message: "This field has to be filled." })
@@ -24,11 +24,14 @@ const loginSchema = z.object({
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters." }),
+  confirmPassword: z
+    .string()
+    .min(8, { message: "Confirm Password must be a same as Password" }),
 });
 
-export default function Home() {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+export default function SignUP() {
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -44,8 +47,9 @@ export default function Home() {
       <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            Login to your account
+            Create an account
           </h1>
+
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -82,16 +86,35 @@ export default function Home() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Login</Button>
+
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter Confirm Password"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Create an account</Button>
             </form>
           </Form>
+
           <p className="text-sm font-light text-black">
-            Don’t have an account yet?{" "}
+            Already have an account?{" "}
             <Link
-              href="/sign-up"
+              href="/"
               className="font-medium text-blue-600 hover:underline "
             >
-              Sign up
+              Login here
             </Link>
           </p>
         </div>
