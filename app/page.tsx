@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 
 const loginSchema = z.object({
   email: z
@@ -27,6 +29,9 @@ const loginSchema = z.object({
 });
 
 export default function Home() {
+  const route = useRouter();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -35,8 +40,35 @@ export default function Home() {
     },
   });
 
-  function onSubmit(values: any) {
-    console.log(values);
+  async function onSubmit(values: any) {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
+        console.log("Login successful", data);
+        toast({
+          title: "Login successful",
+        });
+        route.push("dashboard/tasks");
+      } else {
+        toast({
+          title: "Login failed",
+        });
+      }
+    } catch (error: any) {
+      console.error("Error during login:", error);
+      toast({
+        title: error,
+      });
+    }
   }
 
   return (

@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,22 +16,27 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 
-
-const signUpSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: "This field has to be filled." })
-    .email("This is not a valid email."),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters." }),
-  confirmPassword: z
-    .string()
-    .min(8, { message: "Confirm Password must be a same as Password" }),
-});
+const signUpSchema = z
+  .object({
+    email: z
+      .string()
+      .min(1, { message: "This field has to be filled." })
+      .email("This is not a valid email."),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters." }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 export default function SignUP() {
+  const route = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -40,8 +46,36 @@ export default function SignUP() {
     },
   });
 
-  function onSubmit(values: any) {
-    console.log(values);
+  async function onSubmit(values: any) {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        throw new Error("Sign-up failed");
+      }
+
+      const data = await response.json();
+
+      console.log("Sign-up successful", data);
+
+      toast({
+        title: "Sign-up successful",
+      });
+
+      route.push("/");
+    } catch (error: any) {
+      console.error("Error during sign-up:", error);
+
+      toast({
+        title: error,
+      });
+    }
   }
 
   return (
