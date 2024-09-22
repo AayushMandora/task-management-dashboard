@@ -204,7 +204,7 @@ const TasksPage = () => {
 
       {/* Task Data Table */}
       <table className="w-full text-left table-auto">
-        <thead className="border-b text-center border-zinc-500">
+        <thead className="border-b text-xs md:text-lg text-center border-zinc-500">
           <tr>
             <th>Title</th>
             <th>Status</th>
@@ -218,14 +218,14 @@ const TasksPage = () => {
             filteredTasks.map((task: any) => (
               <tr
                 key={task._id}
-                className="border-b text-center border-zinc-500"
+                className="border-b text-xs md:text-lg text-center border-zinc-500"
               >
                 <td>{task.title}</td>
                 <td>{task.status}</td>
                 <td>{task.priority}</td>
                 <td>{task.dueDate || "N/A"}</td>
                 <td>
-                  <div className="flex gap-3 justify-center">
+                  <div className="flex gap-3 text-xs justify-center">
                     <Button onClick={() => handleDeleteTask(task._id)}>
                       Delete
                     </Button>
