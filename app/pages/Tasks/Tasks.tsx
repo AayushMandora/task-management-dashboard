@@ -173,7 +173,7 @@ const TasksPage = () => {
         )}
         {/* Filter By Status */}
         <Select onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[25%] md:w-[180px]">
             <SelectValue placeholder="Filter By Status" />
           </SelectTrigger>
           <SelectContent>
@@ -187,7 +187,7 @@ const TasksPage = () => {
 
         {/* Filter By Priority */}
         <Select onValueChange={setPriorityFilter}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[25%] md:w-[180px]">
             <SelectValue placeholder="Filter By Priority" />
           </SelectTrigger>
           <SelectContent>
@@ -252,7 +252,7 @@ const TasksPage = () => {
       {/* Add/Edit Task Form */}
       {showForm && (
         <div
-          className="p-4 absolute bg-white rounded-md w-[40%] top-[50%] left-[50%] text-black"
+          className="p-4 absolute bg-white rounded-md w-[90%] md:w-[40%] top-[50%] left-[50%] text-black"
           style={{ translate: "-50% -50%" }}
         >
           <h3 className="text-xl mb-4 font-bold">

@@ -31,7 +31,7 @@ export default function KanbanBoard() {
       }
     };
     fetchTasks();
-  },[token]);
+  }, [token]);
 
   // Handle drag and drop
   const onDragEnd = async (result: any) => {
@@ -85,7 +85,7 @@ export default function KanbanBoard() {
   return (
     <div className="p-6">
       <h1 className="text-xl font-bold mb-4">Kanban Board</h1>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-3 md:gap-6 text-sm">
         <DragDropContext onDragEnd={onDragEnd}>
           {statuses.map((status) => (
             <KanbanColumn key={status} status={status} tasks={tasks} />
@@ -106,7 +106,7 @@ const KanbanColumn = ({ status = "To-Do", tasks = [] }: KanbanColumnProps) => {
 
   return (
     <div className="bg-white/15 p-4 rounded-lg">
-      <h2 className="text-lg font-semibold mb-4">{status}</h2>
+      <h2 className="text-sm md:text-lg font-bold mb-4">{status}</h2>
       <Droppable droppableId={status}>
         {(provided) => (
           <div
@@ -123,8 +123,10 @@ const KanbanColumn = ({ status = "To-Do", tasks = [] }: KanbanColumnProps) => {
                     {...provided.dragHandleProps}
                     className="bg-black/40 p-4 rounded-lg shadow"
                   >
-                    <div className="text-lg font-bold">{task.title}</div>
-                    <div className="text-sm">{task.description}</div>
+                    <div className="text-sm md:text-lg font-bold">
+                      {task.title}
+                    </div>
+                    <div className="text-xs md:text-sm">{task.description}</div>
                   </div>
                 )}
               </Draggable>

@@ -12,7 +12,7 @@ const NavBar = () => {
   return (
     <div className="flex justify-between items-center border-b border-gray-500">
       <div className="p-3 text-xl font-black">TMD</div>
-      <NavigationMenu className="p-3">
+      <NavigationMenu className="text-sm md:text-lg p-3">
         <NavigationMenuList className="gap-3">
           <NavigationMenuItem className="border rounded-xl p-3 hover:bg-white/15 hover:cursor-pointer">
             <Link href="tasks" legacyBehavior passHref>
