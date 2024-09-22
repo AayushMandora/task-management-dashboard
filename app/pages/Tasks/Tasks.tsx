@@ -163,6 +163,7 @@ const TasksPage = () => {
         {/* Clear Filter */}
         {(statusFilter !== "" || priorityFilter !== "") && (
           <Button
+            className="text-xs md:text-lg"
             onClick={() => {
               setStatusFilter("");
               setPriorityFilter("");
@@ -173,7 +174,7 @@ const TasksPage = () => {
         )}
         {/* Filter By Status */}
         <Select onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[25%] md:w-[180px]">
+          <SelectTrigger className="w-[25%] text-xs md:text-lg md:w-[180px]">
             <SelectValue placeholder="Filter By Status" />
           </SelectTrigger>
           <SelectContent>
@@ -187,7 +188,7 @@ const TasksPage = () => {
 
         {/* Filter By Priority */}
         <Select onValueChange={setPriorityFilter}>
-          <SelectTrigger className="w-[25%] md:w-[180px]">
+          <SelectTrigger className="w-[25%] text-xs md:text-lg md:w-[180px]">
             <SelectValue placeholder="Filter By Priority" />
           </SelectTrigger>
           <SelectContent>
@@ -199,7 +200,12 @@ const TasksPage = () => {
           </SelectContent>
         </Select>
 
-        <Button onClick={() => setShowForm(!showForm)}>+ Add Task</Button>
+        <Button
+          className="text-xs md:text-lg"
+          onClick={() => setShowForm(!showForm)}
+        >
+          + Add Task
+        </Button>
       </div>
 
       {/* Task Data Table */}
@@ -226,10 +232,16 @@ const TasksPage = () => {
                 <td>{task.dueDate || "N/A"}</td>
                 <td>
                   <div className="flex gap-3 text-xs justify-center">
-                    <Button onClick={() => handleDeleteTask(task._id)}>
+                    <Button
+                      className="text-xs md:text-lg"
+                      onClick={() => handleDeleteTask(task._id)}
+                    >
                       Delete
                     </Button>
-                    <Button onClick={() => handleUpdateTask(task._id)}>
+                    <Button
+                      className="text-xs md:text-lg"
+                      onClick={() => handleUpdateTask(task._id)}
+                    >
                       Edit
                     </Button>
                   </div>
