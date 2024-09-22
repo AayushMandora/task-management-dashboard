@@ -54,7 +54,7 @@ const TasksPage = () => {
       setLoading(false);
     };
     fetchTasks();
-  }, []);
+  }, [token]);
 
   // Filter tasks by status and priority
   useEffect(() => {
@@ -78,7 +78,7 @@ const TasksPage = () => {
 
   // Handle add task
   const handleAddTask = async () => {
-    var response: any;
+    let response: any;
     if (!editMode) {
       response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/tasks`, {
         method: "POST",

@@ -31,7 +31,7 @@ export default function KanbanBoard() {
       }
     };
     fetchTasks();
-  },[]);
+  },[token]);
 
   // Handle drag and drop
   const onDragEnd = async (result: any) => {
