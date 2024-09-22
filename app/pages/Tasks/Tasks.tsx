@@ -12,11 +12,13 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+
+import { useToast } from "@/hooks/use-toast";
 
 const TasksPage = () => {
-  const route = useRouter();
+  const { toast } = useToast();
 
+  const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState<any>([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -39,8 +41,9 @@ const TasksPage = () => {
 
   // Fetch tasks
   useEffect(() => {
+    setLoading(true);
     const fetchTasks = async () => {
-      const response = await fetch(`http://localhost:5000/api/tasks`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/tasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -48,6 +51,7 @@ const TasksPage = () => {
       const data = await response.json();
       setTasks(data);
       setFilteredTasks(data);
+      setLoading(false);
     };
     fetchTasks();
   }, []);
@@ -76,7 +80,7 @@ const TasksPage = () => {
   const handleAddTask = async () => {
     var response: any;
     if (!editMode) {
-      response = await fetch(`http://localhost:5000/api/tasks`, {
+      response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,30 +88,53 @@ const TasksPage = () => {
         },
         body: JSON.stringify(newTask),
       });
+      if (response.ok) {
+        toast({
+          title: "Task Added Successfully",
+        });
+      }
     } else {
-      response = await fetch(`http://localhost:5000/api/tasks/${editId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(newTask),
-      });
+      response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}api/tasks/${editId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(newTask),
+        }
+      );
+      if (response.ok) {
+        toast({
+          title: "Task Updated Successfully",
+        });
+      }
     }
 
     setTasks(await response.json());
+    setNewTask({
+      title: "",
+      description: "",
+      status: "To-Do",
+      priority: "Low",
+      dueDate: "",
+    });
     setShowForm(false);
   };
 
   // Handle delete task
   const handleDeleteTask = async (id: any) => {
-    const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}api/tasks/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const remainingData = await response.json();
     setTasks(remainingData.Data);
   };
@@ -116,13 +143,16 @@ const TasksPage = () => {
   const handleUpdateTask = async (id: any) => {
     setEditMode(true);
     setEditId(id);
-    const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}api/tasks/${id}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     setNewTask(await response.json());
     setShowForm(true);
   };
@@ -130,6 +160,17 @@ const TasksPage = () => {
   return (
     <div className="p-3 space-y-3">
       <div className="flex justify-end gap-4 mb-4">
+        {/* Clear Filter */}
+        {(statusFilter !== "" || priorityFilter !== "") && (
+          <Button
+            onClick={() => {
+              setStatusFilter("");
+              setPriorityFilter("");
+            }}
+          >
+            Clear
+          </Button>
+        )}
         {/* Filter By Status */}
         <Select onValueChange={setStatusFilter}>
           <SelectTrigger className="w-[180px]">
@@ -176,7 +217,7 @@ const TasksPage = () => {
           {filteredTasks.length > 0 &&
             filteredTasks.map((task: any) => (
               <tr
-                key={task.id}
+                key={task._id}
                 className="border-b text-center border-zinc-500"
               >
                 <td>{task.title}</td>
@@ -198,10 +239,14 @@ const TasksPage = () => {
         </tbody>
       </table>
 
-      {filteredTasks.length <= 0 && (
-        <div className="text-center">
-          There is no any task available, add new task.
-        </div>
+      {loading ? (
+        <div className="text-center">Loading....</div>
+      ) : (
+        filteredTasks.length <= 0 && (
+          <div className="text-center">
+            There is no any task available, add new task.
+          </div>
+        )
       )}
 
       {/* Add/Edit Task Form */}

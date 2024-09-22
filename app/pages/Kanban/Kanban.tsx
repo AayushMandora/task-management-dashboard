@@ -14,13 +14,16 @@ export default function KanbanBoard() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/tasks", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_URL}api/tasks`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const data = await response.json();
         setTasks(data);
       } catch (err) {
@@ -28,7 +31,7 @@ export default function KanbanBoard() {
       }
     };
     fetchTasks();
-  });
+  },[]);
 
   // Handle drag and drop
   const onDragEnd = async (result: any) => {
@@ -57,7 +60,7 @@ export default function KanbanBoard() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/tasks/${draggedTask._id}`,
+          `${process.env.NEXT_PUBLIC_URL}api/tasks/${draggedTask._id}`,
           {
             method: "PUT",
             headers: {
@@ -67,7 +70,8 @@ export default function KanbanBoard() {
             body: JSON.stringify(updatedTask),
           }
         );
-        setTasks(await response.json());
+        const data = await response.json();
+        setTasks(data);
 
         if (!response.ok) {
           throw new Error("Error updating task");

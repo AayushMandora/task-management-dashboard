@@ -15,7 +15,7 @@ export default function Layout({
   const route = useRouter();
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    if (token === null) {
       route.push("/");
     }
   });
